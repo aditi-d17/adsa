@@ -1,0 +1,116 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Node
+{
+    string word;
+    string meaning;
+    Node *left;
+    Node *right;
+    public:
+    Node()
+    {
+        left = nullptr;
+        right = nullptr;
+    }
+    Node(string word,string meaning)
+    {
+        this->word = word;
+        this->meaning = meaning;
+        left = nullptr;
+        right = nullptr;
+    }
+
+    friend class Dictionary;
+};
+
+class Dictionary
+{
+    public:
+        int countl=0;
+    Node *root;
+
+    Dictionary()
+    {
+        root = nullptr;
+    }
+    int ch;
+
+    void createTree();
+    Node *insert(Node *,string,string);
+    void inorder(Node *);
+    Node *getroot()
+    {
+        return(root);
+    }
+    void search(Node *,string);
+    void deleteNode(Node *,string);
+    void deleteNodeMain()
+    {
+        string ch;
+        cout<<"Enter node to be deleted";
+        cin>>ch;
+        deleteNode(root,ch);
+        inorder(root);
+    }
+
+    int Leaf(Node *);
+    int height(Node *);
+    void Mirror(Node *);
+
+};
+
+void Dictionary::createTree()
+{
+    int noOfNodes;
+    string ipWord,ipMeaning;
+
+    cout<<"Enter number of nodes:";
+    cin>>noOfNodes;
+
+    for(int i=0;i<noOfNodes;i++)
+    {
+        cout<<"Enter word:";
+        cin>>ipWord;
+        cout<<"Enter meaning:";
+        cin>>ipMeaning;
+
+
+        if(root==nullptr)
+        {
+            root = new Node(ipWord,ipMeaning);
+        }
+
+        else
+        {
+             insert(root,ipWord,ipMeaning);
+        }
+    }
+    string ch;
+    cout<<"enter word to be found:";
+    cin>>ch;
+    search(root,ch);
+
+}
+
+Node *Dictionary::insert(Node *tempRoot, string tempWord, string tempMeaning)
+{
+    Node *newNode = new Node(tempWord,tempMeaning);
+    if(tempRoot==nullptr)
+    {
+        tempRoot = newNode;
+        return tempRoot;
+    }
+    else
+        if(tempWord<tempRoot->word)
+        {
+            tempRoot->left=insert(tempRoot->left,tempWord,tempMeaning);
+        }
+        else
+        {
+            tempRoot->right=insert(tempRoot->right,tempWord,tempMeaning);
+        }
+        return tempRoot;
+}
